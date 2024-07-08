@@ -1,0 +1,7 @@
+Flask==2.0.2
+flask_cors==4.0.1
+flask_restful==0.3.10
+marshmallow==3.21.3
+numpy==1.21.0
+pandas==1.2.5
+scikit_learn==1.5.1
