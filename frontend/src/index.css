@@ -92,15 +92,36 @@ button:hover {
   background-color: #c43b3b;
 }
 
+/* Modal overlay and content styling */
+.ReactModal__Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(227, 242, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ReactModal__Content {
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  max-width: 700px;
+  width: 90%;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
 .output-card {
-  margin-top: 30px;
   padding: 20px;
   background-color: #ffffff;
   border: 1px solid #cccccc;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 700px;
   text-align: center;
   font-size: 18px;
   color: #333333;
