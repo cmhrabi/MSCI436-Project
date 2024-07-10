@@ -5,3 +5,4 @@ marshmallow==3.21.3
 numpy==1.21.0
 pandas==1.2.5
 scikit_learn==1.5.1
+Werkzeug==2.3

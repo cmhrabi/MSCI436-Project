@@ -55,33 +55,46 @@ const MainComponent = () => {
     glucose: 80
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const confirmSubmission = window.confirm("Are you sure you want to submit?");
     if (!confirmSubmission) {
       return;
     }
-    // Mock output values
-    const heartDisease = "Yes";
-    const reduceCigarettes = 4;
-    const increasePhysicalHealth = 10;
-    const riskHeartDisease = "Yes"
 
-    const result = `
-      Do you have heart disease?
-      *${heartDisease}
+    fetch("http://localhost:5000/predict", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(sampleData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Mock output values
+      const heartDisease = "Yes";
+      const reduceCigarettes = 4;
+      const increasePhysicalHealth = 10;
+      const riskHeartDisease = "Yes"
 
-      Are you at risk for heart disease in 10 years?
-      *${riskHeartDisease}
+      const result = `
+        Do you have heart disease?
+        *${heartDisease}
 
-      How to Help
+        Are you at risk for heart disease in 10 years?
+        *${riskHeartDisease}
 
-      Reduce Cigarettes/Day by: *${reduceCigarettes}
-      Minimize Alcohol Drinking
-      Increase Physical Health by: *${increasePhysicalHealth}
-    `;
-    setOutput(result);
-    setDrConfirm(false);
+        How to Help
+
+        Reduce Cigarettes/Day by: *${reduceCigarettes}
+        Minimize Alcohol Drinking
+        Increase Physical Health by: *${increasePhysicalHealth}
+
+        Output: *${data["predict"][0]}
+      `;
+      setOutput(result);
+      setDrConfirm(false);
+    })
   };
 
   const handleCheckboxChange = (event) => {

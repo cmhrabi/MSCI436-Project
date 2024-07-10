@@ -1,12 +1,11 @@
 import json
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from sklearn.model_selection import train_test_split
 from flask_cors import CORS
 import numpy as np
 from marshmallow import ValidationError
-
 from model import predict_heart_risk
 from schema import PredictSchema
 from model_training import clean_data_set
@@ -54,14 +53,14 @@ class Predict(Resource):
             try:
                 result = schema.load(request_data)
             except ValidationError as err:
-                return jsonify(err.messages)
+                return make_response(jsonify(err.messages), 400)
 
             data = request.get_json()
             predict = predict_heart_risk(data)
             return {'predict':predict.tolist()}
 
         except Exception as error:
-            return {'error': error}
+            return make_response({'error': error}, 400)
 
         
 api.add_resource(Test,'/')
