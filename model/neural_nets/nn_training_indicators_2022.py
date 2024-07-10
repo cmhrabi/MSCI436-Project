@@ -10,66 +10,6 @@ from keras import ops
 def clean_data_set():
     data = pd.read_csv("model/data/2022/heart_2022_no_nans.csv")
     df = pd.DataFrame(data)
-
-    unique_entries = df['RemovedTeeth'].unique()
-    print("UNIQUE RemovedTeeth CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadHeartAttack'].unique()
-    print("UNIQUE HadHeartAttack CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadAngina'].unique()
-    print("UNIQUE HadAngina CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadStroke'].unique()
-    print("UNIQUE HadStroke CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadAsthma'].unique()
-    print("UNIQUE HadAsthma CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadSkinCancer'].unique()
-    print("UNIQUE HadSkinCancer CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadCOPD'].unique()
-    print("UNIQUE HadCOPD CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadDepressiveDisorder'].unique()
-    print("UNIQUE HadDepressiveDisorder CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadKidneyDisease'].unique()
-    print("UNIQUE HadKidneyDisease CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadArthritis'].unique()
-    print("UNIQUE HadArthritis CATEGORIES: \n", unique_entries)
-    unique_entries = df['HadDiabetes'].unique()
-    print("UNIQUE HadDiabetes CATEGORIES: \n", unique_entries)
-    unique_entries = df['DeafOrHardOfHearing'].unique()
-    print("UNIQUE DeafOrHardOfHearing CATEGORIES: \n", unique_entries)
-    unique_entries = df['BlindOrVisionDifficulty'].unique()
-    print("UNIQUE BlindOrVisionDifficulty CATEGORIES: \n", unique_entries)
-    unique_entries = df['DifficultyConcentrating'].unique()
-    print("UNIQUE DifficultyConcentrating CATEGORIES: \n", unique_entries)
-    unique_entries = df['DifficultyWalking'].unique()
-    print("UNIQUE DifficultyWalking CATEGORIES: \n", unique_entries)
-    unique_entries = df['DifficultyDressingBathing'].unique()
-    print("UNIQUE DifficultyDressingBathing CATEGORIES: \n", unique_entries)
-    unique_entries = df['DifficultyErrands'].unique()
-    print("UNIQUE DifficultyErrands CATEGORIES: \n", unique_entries)
-    unique_entries = df['SmokerStatus'].unique()
-    print("UNIQUE SmokerStatus CATEGORIES: \n", unique_entries)
-    unique_entries = df['ECigaretteUsage'].unique()
-    print("UNIQUE ECigaretteUsage CATEGORIES: \n", unique_entries)
-    unique_entries = df['ChestScan'].unique()
-    print("UNIQUE ChestScan CATEGORIES: \n", unique_entries)
-    unique_entries = df['RaceEthnicityCategory'].unique()
-    print("UNIQUE RaceEthnicityCategory CATEGORIES: \n", unique_entries)
-    unique_entries = df['AgeCategory'].unique()
-    print("UNIQUE AgeCategory CATEGORIES: \n", unique_entries)
-    unique_entries = df['AlcoholDrinkers'].unique()
-    print("UNIQUE AlcoholDrinkers CATEGORIES: \n", unique_entries)
-    unique_entries = df['HIVTesting'].unique()
-    print("UNIQUE HIVTesting CATEGORIES: \n", unique_entries)
-    unique_entries = df['FluVaxLast12'].unique()
-    print("UNIQUE FluVaxLast12 CATEGORIES: \n", unique_entries)
-    unique_entries = df['PneumoVaxEver'].unique()
-    print("UNIQUE PneumoVaxEver CATEGORIES: \n", unique_entries)
-    unique_entries = df['TetanusLast10Tdap'].unique()
-    print("UNIQUE TetanusLast10Tdap CATEGORIES: \n", unique_entries)
-    unique_entries = df['HighRiskLastYear'].unique()
-    print("UNIQUE HighRiskLastYear CATEGORIES: \n", unique_entries)
-    unique_entries = df['HighRiskLastYear'].unique()
-    print("UNIQUE HighRiskLastYear CATEGORIES: \n", unique_entries)
-    unique_entries = df['CovidPos'].unique()
     
     # Replacing categorical values
     df['State'] = df['State'].map({'Alabama': 0, 'Alaska': 1, 'Arizona': 2, 'Arkansas': 3, 'California': 4, 'Colorado': 5,
@@ -89,25 +29,58 @@ def clean_data_set():
                                                     '5 or more years ago': 3})
     df['GeneralHealth'] = df['GeneralHealth'].map({'Very good': 0, 'Fair': 1, 'Good': 2, 
                                                     'Poor': 3, 'Excellent': 4})
+    df['RemovedTeeth'] = df['RemovedTeeth'].map({'No': 0, 'Yes': 1})
     df['PhysicalActivities'] = df['PhysicalActivities'].map({'No': 0, 'Yes': 1})
-    # df['Diabetic'] = df['Diabetic'].map({'No': 0, 'Yes': 1})
-    # df['AgeCategory'] = df['AgeCategory'].map({'80 or older': 80,
-    #                                                                  '75-79': 76,
-    #                                                                  '70-74': 72,
-    #                                                                  '65-69': 66, 
-    #                                                                  '60-64': 62,
-    #                                                                  '55-59': 54,
-    #                                                                  '50-54': 52,
-    #                                                                  '45-49': 46,
-    #                                                                  '40-44': 42,
-    #                                                                  '35-39': 36,
-    #                                                                  '30-34': 32,
-    #                                                                  '25-29': 26,
-    #                                                                  '18-24': 21,})
-    # df['Stroke'] = df['Stroke'].map({'No': 0, 'Yes': 1})
-    # df['Smoking'] = df['Smoking'].map({'No': 0, 'Yes': 1})
-    # df['HeartDisease'] = df['HeartDisease'].map({'No': 0, 'Yes': 1})
-    # Dropping the 'id' column
+    df['HadHeartAttack'] = df['HadHeartAttack'].map({'No': 0, 'Yes': 1})
+    df['HadAngina'] = df['HadAngina'].map({'No': 0, 'Yes': 1})
+    df['HadStroke'] = df['HadStroke'].map({'No': 0, 'Yes': 1})
+    df['HadAsthma'] = df['HadAsthma'].map({'No': 0, 'Yes': 1})
+    df['HadSkinCancer'] = df['HadSkinCancer'].map({'No': 0, 'Yes': 1})
+    df['HadCOPD'] = df['HadCOPD'].map({'No': 0, 'Yes': 1})
+    df['HadDepressiveDisorder'] = df['HadDepressiveDisorder'].map({'No': 0, 'Yes': 1})
+    df['HadKidneyDisease'] = df['HadKidneyDisease'].map({'No': 0, 'Yes': 1})
+    df['HadArthritis'] = df['HadArthritis'].map({'No': 0, 'Yes': 1})
+    df['HadDiabetes'] = df['HadDiabetes'].map({'No': 0, 'Yes': 1, 
+                                         'No, pre-diabetes or borderline diabetes': 2, 'Yes, but only during pregnancy (female)':3})
+    df['DeafOrHardOfHearing'] = df['DeafOrHardOfHearing'].map({'No': 0, 'Yes': 1})
+    df['BlindOrVisionDifficulty'] = df['BlindOrVisionDifficulty'].map({'No': 0, 'Yes': 1})
+    df['DifficultyConcentrating'] = df['DifficultyConcentrating'].map({'No': 0, 'Yes': 1})
+    df['DifficultyWalking'] = df['DifficultyWalking'].map({'No': 0, 'Yes': 1})
+    df['DifficultyDressingBathing'] = df['DifficultyDressingBathing'].map({'No': 0, 'Yes': 1})
+    df['DifficultyErrands'] = df['DifficultyErrands'].map({'No': 0, 'Yes': 1})
+    df['SmokerStatus'] = df['SmokerStatus'].map({'Former smoker': 0, 'Never smoked': 1,
+                                                  'Current smoker - now smokes every day': 2,
+                                                  'Current smoker - now smokes some days':3})
+    df['ECigaretteUsage'] = df['ECigaretteUsage'].map({'Never used e-cigarettes in my entire life': 0, 'Use them some days': 1,
+                                                  'Not at all (right now)': 2, 'Use them every day':3})
+    df['ChestScan'] = df['ChestScan'].map({'No': 0, 'Yes': 1})
+    df['RaceEthnicityCategory'] = df['RaceEthnicityCategory'].map({'White only, Non-Hispanic': 0, 'Black only, Non-Hispanic': 1,
+                                                                    'Other race only, Non-Hispanic': 2, 'Multiracial, Non-Hispanic': 3, 
+                                                                    'Hispanic': 4})
+    df['AgeCategory'] = df['AgeCategory'].map({'80 or older': 80,
+                                                                     '75-79': 76,
+                                                                     '70-74': 72,
+                                                                     '65-69': 66, 
+                                                                     '60-64': 62,
+                                                                     '55-59': 54,
+                                                                     '50-54': 52,
+                                                                     '45-49': 46,
+                                                                     '40-44': 42,
+                                                                     '35-39': 36,
+                                                                     '30-34': 32,
+                                                                     '25-29': 26,
+                                                                     '18-24': 21,})
+    df['AlcoholDrinkers'] = df['AlcoholDrinkers'].map({'No': 0, 'Yes': 1})
+    df['HIVTesting'] = df['HIVTesting'].map({'No': 0, 'Yes': 1})
+    df['FluVaxLast12'] = df['FluVaxLast12'].map({'No': 0, 'Yes': 1})
+    df['PneumoVaxEver'] = df['PneumoVaxEver'].map({'No': 0, 'Yes': 1})
+    df['TetanusLast10Tdap'] = df['TetanusLast10Tdap'].map({'Yes, received Tdap': 0, 
+                                                           'Yes, received tetanus shot but not sure what type': 1,
+                                                           'No, did not receive any tetanus shot in the past 10 years': 2,
+                                                           'Yes, received tetanus shot, but not Tdap': 3})
+    df['HighRiskLastYear'] = df['HighRiskLastYear'].map({'No': 0, 'Yes': 1})
+    df['CovidPos'] = df['CovidPos'].map({'No': 0, 'Yes': 1, 
+                                         'Tested positive using home test without a health professional':2})
 
     # check the col names and data types
     column_names = df.columns
@@ -118,15 +91,15 @@ def clean_data_set():
     return df
 
 def trainNN(input):
-    x=input.drop('TenYearCHD',axis=1)
-    y=input['TenYearCHD']
+    x=input.drop('HadHeartAttack',axis=1)
+    y=input['HadHeartAttack']
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify=y, test_size = 0.2 , random_state = 0)
     model = keras.Sequential()
-    model.add(keras.Input(shape=(15,)))
-    model.add(keras.layers.Dense(15, activation="tanh"))
-    model.add(keras.layers.Dense(15, activation="tanh"))
-    model.add(keras.layers.Dense(15, activation="tanh"))
+    model.add(keras.Input(shape=(39,)))
+    model.add(keras.layers.Dense(39, activation="tanh"))
+    model.add(keras.layers.Dense(39, activation="tanh"))
+    model.add(keras.layers.Dense(39, activation="tanh"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
 
     model.compile(
@@ -144,12 +117,11 @@ def trainNN(input):
     return model
 
 def main():
-    clean_data_set()
-    # model = trainNN(clean_data_set())
-    # model_pkl_file = "heart_classifier_model.pkl"  
+    model = trainNN(clean_data_set())
+    model_pkl_file = "indicator_2022_nn.pkl"  
 
-    # with open(model_pkl_file, 'wb') as file:  
-    #     pickle.dump(model, file)
+    with open(model_pkl_file, 'wb') as file:  
+        pickle.dump(model, file)
 
 if __name__ == "__main__":
     main()

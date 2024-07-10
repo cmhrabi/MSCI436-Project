@@ -18,7 +18,7 @@ def clean_data_set():
     df['AgeCategory'] = df['AgeCategory'].map({'80 or older': 80,
                                                                      '75-79': 76,
                                                                      '70-74': 72,
-                                                                     '65-69': 66, 
+                                                                     '65-69': 66,
                                                                      '60-64': 62,
                                                                      '55-59': 54,
                                                                      '50-54': 52,
@@ -57,9 +57,9 @@ def trainNN(input):
     x_train, x_test, y_train, y_test = train_test_split(x, y, stratify=y, test_size = 0.2 , random_state = 0)
     model = keras.Sequential()
     model.add(keras.Input(shape=(17,)))
-    model.add(keras.layers.Dense(15, activation="tanh"))
-    model.add(keras.layers.Dense(15, activation="tanh"))
-    model.add(keras.layers.Dense(15, activation="tanh"))
+    model.add(keras.layers.Dense(17, activation="tanh"))
+    model.add(keras.layers.Dense(17, activation="tanh"))
+    model.add(keras.layers.Dense(17, activation="tanh"))
     model.add(keras.layers.Dense(1, activation="sigmoid"))
 
     model.compile(
