@@ -11,23 +11,20 @@ def clean_data_sets():
     # risk of coronary heart disease CHD
     risk_data = pd.read_csv("model/data/data_cardiovascular_risk.csv")
     risk_df = pd.DataFrame(risk_data)
-
     # Dropping the non overlapping cols
     risk_df.drop(['id', 'education', 'cigsPerDay', 'BPMeds', 'totChol', 'heartRate', 'prevalentHyp', 
                   'diaBP', 'glucose', 'sysBP'], axis=1, inplace=True)
-
     # Replacing missing values
     risk_df['BMI'] = risk_df['BMI'].fillna(risk_df['BMI'].median())
-
     # Replacing categorical values
     risk_df['sex'] = risk_df['sex'].map({'M': 0, 'F': 1})
     risk_df['is_smoking'] = risk_df['is_smoking'].map({'YES': 0, 'NO': 1})
-
     column_names = risk_df.columns
     print(column_names)
     types = risk_df.dtypes
     print(types)
     # print(risk_df.head())
+
 
     # Key Indicators of Heart Disease 2020
     heart_2020_data = pd.read_csv("model/data/2020/heart_2020_cleaned.csv")
@@ -38,13 +35,10 @@ def clean_data_sets():
     
     unique_entries = heart_2020_df['Diabetic'].unique()
     print("Diabetic values: \n", unique_entries)
-
     # Replacing missing values for 'Diabetic'
     heart_2020_df['Diabetic'] = heart_2020_df['Diabetic'].fillna('No')
     unique_entries = heart_2020_df['Diabetic'].unique()
     print("Diabetic values: \n", unique_entries)
-    
-
     # Replacing categorical values
     heart_2020_df['Sex'] = heart_2020_df['Sex'].map({'Male': 0, 'Female': 1})
     heart_2020_df['Diabetic'] = heart_2020_df['Diabetic'].map({'No': 0, 'Yes': 1})
