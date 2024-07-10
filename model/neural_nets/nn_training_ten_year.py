@@ -11,17 +11,21 @@ def clean_data_set():
     data=pd.read_csv("model/data/data_cardiovascular_risk.csv")
     df=pd.DataFrame(data)
 
-    df['education'].fillna(df['education'].value_counts().idxmax(), inplace=True)
-    df['cigsPerDay'].fillna(df['cigsPerDay'].median(), inplace=True)
-    df['BPMeds'].fillna(df['BPMeds'].value_counts().idxmax(), inplace=True)
-    df['totChol'].fillna(df['totChol'].median(), inplace=True)
-    df['BMI'].fillna(df['BMI'].median(), inplace=True)
-    df['heartRate'].fillna(df['heartRate'].median(), inplace=True)
-    df['glucose'].fillna(df['glucose'].median(), inplace=True)
+    # Replacing missing values
+    risk_df['education'] = risk_df['education'].fillna(risk_df['education'].value_counts().idxmax())
+    risk_df['cigsPerDay'] = risk_df['cigsPerDay'].fillna(risk_df['cigsPerDay'].median())
+    risk_df['BPMeds'] = risk_df['BPMeds'].fillna(risk_df['BPMeds'].value_counts().idxmax())
+    risk_df['totChol'] = risk_df['totChol'].fillna(risk_df['totChol'].median())
+    risk_df['BMI'] = risk_df['BMI'].fillna(risk_df['BMI'].median())
+    risk_df['heartRate'] = risk_df['heartRate'].fillna(risk_df['heartRate'].median())
+    risk_df['glucose'] = risk_df['glucose'].fillna(risk_df['glucose'].median())
 
-    df['sex'] = df.sex.replace(['M', 'F'], [0, 1])
-    df['is_smoking'] = df.is_smoking.replace(['YES', 'NO'], [0, 1])
-    df.drop(['id'],axis=1,inplace=True)
+    # Replacing categorical values
+    risk_df['sex'] = risk_df['sex'].map({'M': 0, 'F': 1})
+    risk_df['is_smoking'] = risk_df['is_smoking'].map({'YES': 0, 'NO': 1})
+
+    # Dropping the 'id' column
+    risk_df = risk_df.drop(['id'], axis=1)
 
     return df
 
@@ -40,7 +44,6 @@ def trainNN(input):
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=1e-3),
         loss=keras.losses.BinaryCrossentropy(),
-        # metrics=[keras.metrics.BinaryAccuracy(), keras.metrics.FalseNegatives(),],
     )
     
     model.fit(x=x_train, y=y_train)
