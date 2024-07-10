@@ -1,8 +1,9 @@
-// src/MainComponent.js
 import React, { useState } from 'react';
+import Modal from 'react-modal';
 import './index.css';
 import heart from './heart.png';
 
+Modal.setAppElement('#root'); // Ensure this line is present to avoid accessibility issues
 
 const MainComponent = () => {
   const [inputs, setInputs] = useState({
@@ -27,7 +28,8 @@ const MainComponent = () => {
     glucose: '',
   });
   const [output, setOutput] = useState(null);
-  const [drConfirm, setDrConfirm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -84,21 +86,21 @@ const MainComponent = () => {
         Are you at risk for heart disease in 10 years?
         *${riskHeartDisease}
 
-        How to Help
+      Reduce Cigarettes/Day by: *${reduceCigarettes}
+      Minimize Alcohol Drinking
+      Increase Physical Health by: *${increasePhysicalHealth}
+    `;
+    setOutput(result);
+    setIsModalOpen(true);
+    setIsSubmitted(false); // Reset the submission state
+    });
 
-        Reduce Cigarettes/Day by: *${reduceCigarettes}
-        Minimize Alcohol Drinking
-        Increase Physical Health by: *${increasePhysicalHealth}
-
-        Output: *${data["predict"][0]}
-      `;
-      setOutput(result);
-      setDrConfirm(false);
-    })
+  const handleDoctorConfirm = () => {
+    setIsSubmitted(true);
   };
 
-  const handleCheckboxChange = (event) => {
-    setDrConfirm(event.target.checked);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -131,7 +133,7 @@ const MainComponent = () => {
               <option value="2">Hispanic</option>
               <option value="3">Asian</option>
               <option value="4">Black</option>
-              <option value="4">White</option>
+              <option value="5">White</option>
             </select>
           </label>
         </div>
@@ -167,7 +169,7 @@ const MainComponent = () => {
           <label>
             Genetic Health:
             <select
-              name="Genetic Health"
+              name="geneticHealth"
               value={inputs.geneticHealth}
               onChange={handleChange}
             >
@@ -175,7 +177,7 @@ const MainComponent = () => {
               <option value="2">Very Good</option>
               <option value="3">Good</option>
               <option value="4">Fair</option>
-              <option value="4">Poor</option>
+              <option value="5">Poor</option>
             </select>
           </label>
         </div>
@@ -250,7 +252,7 @@ const MainComponent = () => {
             Asthma:
             <input
               type="checkbox"
-              name="Asthma"
+              name="asthma"
               checked={inputs.asthma}
               onChange={handleChange}
             />
@@ -261,7 +263,7 @@ const MainComponent = () => {
             Kidney Disease:
             <input
               type="checkbox"
-              name="Kidney Disease"
+              name="kidney"
               checked={inputs.kidney}
               onChange={handleChange}
             />
@@ -272,7 +274,7 @@ const MainComponent = () => {
             Skin Cancer:
             <input
               type="checkbox"
-              name="Skin Cancer"
+              name="skinCancer"
               checked={inputs.skinCancer}
               onChange={handleChange}
             />
@@ -344,22 +346,24 @@ const MainComponent = () => {
         </div>
         <button type="submit">Submit</button>
       </form>
-      {output && (
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Result Modal"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
         <div className="output-card">
           <h2>Output:</h2>
           <pre>{output}</pre>
-          <label>
-            <h2>Please check if a Doctor confirms the result is correct</h2>
-            <input
-              type="checkbox"
-              checked={drConfirm}
-              onChange={handleCheckboxChange}
-            />
-          </label>
+          {!isSubmitted && <button onClick={handleDoctorConfirm}>Confirm Diagnosis</button>}
+          {isSubmitted && <p>The diagnosis has been submitted to the database.</p>}
+          <div></div>
+          <button onClick={closeModal}>Close</button>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };
-
+}
 export default MainComponent;
