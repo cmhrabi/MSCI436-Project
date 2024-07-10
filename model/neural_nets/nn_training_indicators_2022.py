@@ -11,6 +11,8 @@ def clean_data_set():
     data = pd.read_csv("model/data/2022/heart_2022_no_nans.csv")
     df = pd.DataFrame(data)
     
+    print(df.AgeCategory.unique())
+
     # Replacing categorical values
     df['State'] = df['State'].map({'Alabama': 0, 'Alaska': 1, 'Arizona': 2, 'Arkansas': 3, 'California': 4, 'Colorado': 5,
                                     'Connecticut': 6, 'Delaware': 7, 'District of Columbia': 8, 'Florida': 9,  'Georgia': 10,
@@ -57,19 +59,19 @@ def clean_data_set():
     df['RaceEthnicityCategory'] = df['RaceEthnicityCategory'].map({'White only, Non-Hispanic': 0, 'Black only, Non-Hispanic': 1,
                                                                     'Other race only, Non-Hispanic': 2, 'Multiracial, Non-Hispanic': 3, 
                                                                     'Hispanic': 4})
-    df['AgeCategory'] = df['AgeCategory'].map({'80 or older': 80,
-                                                                     '75-79': 76,
-                                                                     '70-74': 72,
-                                                                     '65-69': 66, 
-                                                                     '60-64': 62,
-                                                                     '55-59': 54,
-                                                                     '50-54': 52,
-                                                                     '45-49': 46,
-                                                                     '40-44': 42,
-                                                                     '35-39': 36,
-                                                                     '30-34': 32,
-                                                                     '25-29': 26,
-                                                                     '18-24': 21,})
+    df['AgeCategory'] = df['AgeCategory'].map({'Age 80 or older': 80,
+                                                'Age 75 to 79': 76,
+                                                'Age 70 to 74': 72,
+                                                'Age 65 to 69': 66, 
+                                                'Age 60 to 64': 62,
+                                                'Age 55 to 59': 54,
+                                                'Age 50 to 54': 52,
+                                                'Age 45 to 49': 46,
+                                                'Age 40 to 44': 42,
+                                                'Age 35 to 39': 36,
+                                                'Age 30 to 34': 32,
+                                                'Age 25 to 29': 26,
+                                                'Age 18 to 24': 21})
     df['AlcoholDrinkers'] = df['AlcoholDrinkers'].map({'No': 0, 'Yes': 1})
     df['HIVTesting'] = df['HIVTesting'].map({'No': 0, 'Yes': 1})
     df['FluVaxLast12'] = df['FluVaxLast12'].map({'No': 0, 'Yes': 1})
@@ -81,6 +83,7 @@ def clean_data_set():
     df['HighRiskLastYear'] = df['HighRiskLastYear'].map({'No': 0, 'Yes': 1})
     df['CovidPos'] = df['CovidPos'].map({'No': 0, 'Yes': 1, 
                                          'Tested positive using home test without a health professional':2})
+
 
     # check the col names and data types
     column_names = df.columns
