@@ -21,8 +21,7 @@ python -m venv env
 source env/bin/activate
 python -m pip install -r model/requirements.txt
 
-cd model/Api
-python app.py
+python model/Api/app.py
 ```
 
 ### Frontend
