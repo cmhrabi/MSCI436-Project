@@ -8,4 +8,4 @@ pandas==2.2.2
 scikit_learn==1.5.1
 Werkzeug==2.3
 imblearn
-tensorflow
+tensorflow==2.16.2
