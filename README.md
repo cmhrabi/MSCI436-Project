@@ -2,7 +2,7 @@
 Project for MSCI436 predicting being at risk of heart disease
 
 ## Deployment Steps
-Contact cmhrabi@uwaterloo.ca if you are having any trouble
+Contact chrabi@uwaterloo.ca if you are having any trouble
 
 ### Backend server
 Windows
