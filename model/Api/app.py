@@ -1,13 +1,12 @@
 import json
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from sklearn.model_selection import train_test_split
 from flask_cors import CORS
 import numpy as np
 from marshmallow import ValidationError
-
-from model import predict_heart_risk
+from model import predict_heart_risk, predict_heart_disease, total_chol_loop, bmi_loop, smoking_loop
 from schema import PredictSchema
 from model_training import clean_data_set
 
@@ -54,14 +53,24 @@ class Predict(Resource):
             try:
                 result = schema.load(request_data)
             except ValidationError as err:
-                return jsonify(err.messages)
+                return make_response(jsonify(err.messages), 400)
 
             data = request.get_json()
-            predict = predict_heart_risk(data)
-            return {'predict':predict.tolist()}
+            predict2 = predict_heart_risk(data["model2"])
+            predict1 = predict_heart_disease(data["model1"])
+
+            if predict1[0] <= 0.5 and predict2[0] >= 0.5:
+
+                return {'predict2':predict2.tolist(), 'predict1': predict1.tolist(), 'recommendations': {'totChol': total_chol_loop(data["model2"]), 'BMI': bmi_loop(data["model2"]), "smoking": smoking_loop(data["model2"])}}
+            if predict1[0] >= 0.5:
+                return {'predict2': [0], 'predict1': predict1.tolist(), 'recommendations': 'NA'}
+            else:
+                return {'predict2':predict2.tolist(), 'predict1': predict1.tolist(), 'recommendations': 'NA'}
+
+            
 
         except Exception as error:
-            return {'error': error}
+            return make_response({'error': error}, 400)
 
         
 api.add_resource(Test,'/')
