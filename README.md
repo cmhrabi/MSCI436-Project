@@ -24,3 +24,10 @@ python -m pip install -r model/requirements.txt
 cd model/Api
 python app.py
 ```
+
+### Frontend
+```
+cd frontend
+npm install
+npm start
+```
