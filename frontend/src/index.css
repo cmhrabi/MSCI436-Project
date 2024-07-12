@@ -28,6 +28,11 @@ body {
   color: #0258a1;
 }
 
+p {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -138,4 +143,8 @@ button:hover {
 .output-card p {
   font-size: 18px;
   color: #333333;
+}
+
+.error {
+  color: #e2383e;
 }

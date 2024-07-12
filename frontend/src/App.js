@@ -17,19 +17,24 @@ const MainComponent = () => {
     skinCancer: false,
     BMI: 28.4,
     smoking: false,
-    cigarettesPerDay: '',
+    cigarettesPerDay: '0',
     diabetes: false,
     hypertensive: false,
     bpMeds: false,
-    physicalHealth: 15,
+    totChol: 15,
     alcohol: false,
-    mentalHealth: 15,
+    sysBP: 15,
     stroke: false,
-    glucose: '',
+    diffWalking: false,
+    glucose: '5',
+    diaBP: '15',
+    heartRate: '15',
   });
   const [output, setOutput] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fetching, setFetching] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -39,24 +44,6 @@ const MainComponent = () => {
     });
   };
 
-  const [sampleData, setSampleData] = useState({
-    age: 64,
-    education: 2,
-    sex: 1,
-    is_smoking: 1,
-    cigs_per_day: 3,
-    BP_meds: 0,
-    prevalent_stroke: 0,
-    prevalent_hyp: 0,
-    diabetes: 0,
-    tot_chol: 221,
-    sys_BP: 148,
-    dia_BP: 85,
-    bmi: 29.77,
-    heart_rate: 90,
-    glucose: 80
-  });
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const confirmSubmission = window.confirm("Are you sure you want to submit?");
@@ -64,36 +51,84 @@ const MainComponent = () => {
       return;
     }
 
-    fetch("http://localhost:5000/predict", {
+    setFetching(true)
+
+    const response = await fetch("http://localhost:5000/predict", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(sampleData)
+      body: JSON.stringify({
+        model1: {
+          BMI: inputs.BMI,
+          smoking: inputs.smoking,
+          alcohol: inputs.alcohol,
+          stroke: inputs.stroke,
+          diffWalking: inputs.diffWalking,
+          sex: inputs.sex,
+          age: inputs.age,
+          race: inputs.race,
+          diabetes: inputs.diabetes,
+          geneticHealth: inputs.geneticHealth,
+          asthma: inputs.asthma,
+          kidney: inputs.kidney,
+          skinCancer: inputs.skinCancer,
+        },
+        model2: {
+          age: inputs.age,
+          education: inputs.education,
+          sex: inputs.sex,
+          smoking: inputs.smoking,
+          cigarettesPerDay: inputs.cigarettesPerDay,
+          bpMeds: inputs.bpMeds,
+          stroke: inputs.stroke,
+          hypertensive: inputs.hypertensive,
+          diabetes: inputs.diabetes,
+          totChol: inputs.totChol,
+          sysBP: inputs.sysBP,
+          diaBP: inputs.diaBP,
+          BMI: inputs.BMI,
+          heartRate: inputs.heartRate,
+          glucose: inputs.glucose,
+        }})
     })
-    .then(response => response.json())
-    .then(data => {
-      // Mock output values
-      const heartDisease = "Yes";
-      const reduceCigarettes = 4;
-      const increasePhysicalHealth = 10;
-      const riskHeartDisease = "Yes"
 
-      const result = `
-        Do you have heart disease?
-        *${heartDisease}
+    try {
+      if (response.ok) {
+        const data = await response.json()
 
-        Are you at risk for heart disease in 10 years?
-        *${riskHeartDisease}
+        const result = `
+Does your patient have heart disease?
+*${data.predict1[0] >= 0.5 ? "Yes" : "No"}
 
-      Reduce Cigarettes/Day by: *${reduceCigarettes}
-      Minimize Alcohol Drinking
-      Increase Physical Health by: *${increasePhysicalHealth}
-    `;
-    setOutput(result);
-    setIsModalOpen(true);
-    setIsSubmitted(false); // Reset the submission state
-    });
+${data.predict1[0] < 0.5 ? `Is your patient at risk for heart disease in 10 years?
+*${data.predict2[0] > 0.5 ? "Yes" : "No"}
+
+${data.recommendations === 'NA' ? "No recommendations as you are not at Risk" : `Reduce patients BMI by: ${data.recommendations.BMI >0 ? data.recommendations.BMI : "Prediction does not change"}
+Reduce patients total cholesterol by: ${data.recommendations.totChol >0 ? data.recommendations.totChol : "Prediction does not change" }
+Quit smoking: ${data.recommendations.smoking ? "Yes" : "Prediction does not change"}`}` : `Your patient appears to have heart disease
+please recommend treatment immediately`}
+        `;
+        setOutput(result);
+        setIsModalOpen(true);
+        setIsSubmitted(false);
+        setFetching(false)
+        setError('') // Reset the submission state
+      } else {
+        setFetching(false)
+        if (response.status === 404) {
+          setError('Server was not found, please ensure you have started the python API');
+        } else if (response.status === 400) {
+          setError('A bad request error occurred please validate inputs and try again')
+        } else {
+          setError('An error occurred please validate inputs and try again')
+        }
+      }
+    } catch {
+      setFetching(false)
+      setError('An error occurred please validate inputs and try again')
+    }
+  };
 
   const handleDoctorConfirm = () => {
     setIsSubmitted(true);
@@ -304,6 +339,17 @@ const MainComponent = () => {
         </div>
         <div className="form-group">
           <label>
+            Difficulty Walking:
+            <input
+              type="checkbox"
+              name="diffWalking"
+              checked={inputs.diffWalking}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+        <div className="form-group">
+          <label>
             BMI:
             <input
               type="range"
@@ -318,33 +364,62 @@ const MainComponent = () => {
         </div>
         <div className="form-group">
           <label>
-            Physical Health:
+            Total Cholesterol:
             <input
               type="range"
-              name="physicalHealth"
+              name="totChol"
               min="1"
-              max="30"
-              value={inputs.physicalHealth}
+              max="300"
+              value={inputs.totChol}
               onChange={handleChange}
             />
-            <span>{inputs.physicalHealth}</span>
+            <span>{inputs.totChol}</span>
           </label>
         </div>
         <div className="form-group">
           <label>
-            Mental Health:
+            Systolic Blood Pressure:
             <input
               type="range"
-              name="mentalHealth"
+              name="sysBP"
               min="0"
-              max="30"
-              value={inputs.mentalHealth}
+              max="300"
+              value={inputs.sysBP}
               onChange={handleChange}
             />
-            <span>{inputs.mentalHealth}</span>
+            <span>{inputs.sysBP}</span>
           </label>
         </div>
-        <button type="submit">Submit</button>
+        <div className="form-group">
+          <label>
+            Diastolic Blood Pressure:
+            <input
+              type="range"
+              name="diaBP"
+              min="0"
+              max="150"
+              value={inputs.diaBP}
+              onChange={handleChange}
+            />
+            <span>{inputs.diaBP}</span>
+          </label>
+        </div>
+        <div className="form-group">
+          <label>
+            Heart Rate:
+            <input
+              type="range"
+              name="heartRate"
+              min="0"
+              max="150"
+              value={inputs.heartRate}
+              onChange={handleChange}
+            />
+            <span>{inputs.heartRate}</span>
+          </label>
+        </div>
+        {error && <h2 className="error">{error}</h2>}
+        <button type="submit">{fetching ? "Loading..." : "Submit"}</button>
       </form>
       <Modal
         isOpen={isModalOpen}
@@ -354,7 +429,7 @@ const MainComponent = () => {
         overlayClassName="Overlay"
       >
         <div className="output-card">
-          <h2>Output:</h2>
+          <h2>Results:</h2>
           <pre>{output}</pre>
           {!isSubmitted && <button onClick={handleDoctorConfirm}>Confirm Diagnosis</button>}
           {isSubmitted && <p>The diagnosis has been submitted to the database.</p>}
@@ -365,5 +440,4 @@ const MainComponent = () => {
     </div>
   );
 };
-}
 export default MainComponent;
