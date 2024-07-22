@@ -11,8 +11,7 @@ python -m venv env
 env\Scripts\activate
 python -m pip install -r model/requirements.txt
 
-cd model/Api
-python app.py
+python model/Api/app.py
 ```
 
 Mac/Linux
